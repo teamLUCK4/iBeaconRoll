@@ -9,3 +9,12 @@
 ## 목표
 - 공부 목적: 학교 서버, 네트워크를 이용하기(클라우드 사용 지양)
 - 추가 예정
+
+## 과정
+
+1. [iBeacon] 비콘 설정 및 detection
+2. [Backend] 도커 + db
+   - postgre
+   - redis
+   - mongodb
+3. ...
