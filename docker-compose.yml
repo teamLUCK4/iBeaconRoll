@@ -32,8 +32,22 @@ services:
     networks:
       - backend
 
+  mongo:
+    image: mongo:6.0
+    container_name: mongo_container
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: password
+    volumes:
+      - mongo_data:/data/db
+      - ./init_data_uuid.js:/docker-entrypoint-initdb.d/init_data_uuid.js:ro
+
 volumes:
   pgdata:
+  mongo_data:
 
 networks:
   backend:
