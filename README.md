@@ -13,8 +13,7 @@
 ## 과정
 
 1. [iBeacon] 비콘 설정 및 detection
-2. [Backend] 도커 + db
+2. [Backend 세팅] 도커 컨테이너 + db
    - postgre
-   - redis
    - mongodb
 3. ...
