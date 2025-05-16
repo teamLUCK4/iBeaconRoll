@@ -43,7 +43,7 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: password
     volumes:
       - mongo_data:/data/db
-      - ./init_data_uuid.js:/docker-entrypoint-initdb.d/init_data_uuid.js:ro
+      - ./mongodb/init_data_uuid.js:/docker-entrypoint-initdb.d/init_data_uuid.js:ro
 
 volumes:
   pgdata:
