@@ -4,7 +4,9 @@ WORKDIR /app
 
 COPY go.mod .
 COPY go.sum .
-RUN go mod tidy
+
+# 의존성 설치
+RUN go mod download
 
 COPY . .
 
