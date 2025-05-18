@@ -11,9 +11,9 @@ import (
     _ "github.com/lib/pq" // PostgreSQL 드라이버 등록
 )
 
-var DB *sql.DB
+var PostgresDB *sql.DB
 
-func ConnectDB() {
+func InitPostgres() {
     dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
         os.Getenv("DB_HOST"),
         os.Getenv("DB_PORT"),
@@ -23,12 +23,12 @@ func ConnectDB() {
     )
 
     var err error
-    DB, err = sql.Open("postgres", dsn)
+    PostgresDB, err = sql.Open("postgres", dsn)
     if err != nil {
         log.Fatal("❌ DB 연결 실패:", err)
     }
 
-    if err = DB.Ping(); err != nil {
+    if err = PostgresDB.Ping(); err != nil {
         log.Fatal("❌ DB Ping 실패:", err)
     }
 
