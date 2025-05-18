@@ -1,16 +1,16 @@
 FROM golang:1.21
 
-WORKDIR /app
+# 👇 모듈 이름에 맞춰 경로 설정
+WORKDIR /go/src/iBeaconRoll-server
 
 COPY go.mod .
 COPY go.sum .
-
-# 의존성 설치
 RUN go mod download
 
 COPY . .
 
-# ✅ 빌드 성공했는지 확인용 로그 추가
-RUN go build -o server . && echo "✅ Go build success" || echo "❌ Go build failed"
+# 🔥 빌드 + 실행 파일 존재 확인
+RUN echo "📦 빌드 중..." && go build -o server . && echo "✅ build ok" && ls -l && ls -l server
 
-CMD ["./server"]
+# ✅ CMD가 정확한 위치에서 ./server 실행되게 보장
+CMD ["/go/src/iBeaconRoll-server/server"]
