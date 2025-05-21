@@ -4,9 +4,10 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/gin-gonic/gin"
-	"iBeaconRoll-server/models"
 	"iBeaconRoll-server/config"
+	"iBeaconRoll-server/models"
+
+	"github.com/gin-gonic/gin"
 )
 
 func UpdateAttendance(c *gin.Context) {
