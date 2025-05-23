@@ -16,6 +16,9 @@ func main() {
 	// 1. PostgreSQL 연결
 	config.InitPostgres()
 
+	// 2. MongoDB 연결
+	config.InitMongoDB()
+
 	// 2. Gin 서버 초기화
 	r := gin.Default()
 

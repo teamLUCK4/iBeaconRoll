@@ -5,11 +5,9 @@ db.createCollection("uuid")
 
 const id = ObjectId()
 
-db.users.insertOne({
+db.uuid.insertOne({
   _id: id,
   uuid: "ADD8CE0A-EF05-4B57-AD8C-7651198EAB2C",
   classroom: "Building 302",
   createdAt: new Date()
 })
-
-
