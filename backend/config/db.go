@@ -3,7 +3,6 @@
 package config
 
 import (
-	"database/sql"
 	"fmt"
 	"log"
 	"os"
@@ -12,8 +11,7 @@ import (
 	_ "github.com/lib/pq" // PostgreSQL 드라이버 등록
 )
 
-var PostgresDB *sql.DB
-var DB *sqlx.DB
+var PostgresDB *sqlx.DB
 
 func InitPostgres() {
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
@@ -25,7 +23,7 @@ func InitPostgres() {
 	)
 
 	var err error
-	PostgresDB, err = sql.Open("postgres", dsn)
+	PostgresDB, err = sqlx.Connect("postgres", dsn)
 	if err != nil {
 		log.Fatal("❌ DB 연결 실패:", err)
 	}
