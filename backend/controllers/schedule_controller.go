@@ -1,14 +1,16 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 	"strconv"
 	"time"
 
+	"iBeaconRoll-server/config"
+
 	"github.com/gin-gonic/gin"
-	
-	"iBeaconRoll-server/database"
+
 	"iBeaconRoll-server/models"
 )
 
@@ -24,14 +26,16 @@ func GetStudentTodaySchedule(c *gin.Context) {
 	// 오늘 요일 가져오기 (Mon, Tue, Wed, Thu, Fri 형식으로 변환)
 	today := time.Now()
 	dayOfWeek := today.Weekday().String()[:3]
-	
+
+	log.Printf("현재 요일: %s", dayOfWeek)
+
 	// 주말인 경우 처리
 	if dayOfWeek == "Sat" || dayOfWeek == "Sun" {
 		c.JSON(http.StatusOK, gin.H{
-			"message": "오늘은 주말입니다. 수업이 없습니다.",
-			"date": today.Format("2006-01-02"),
+			"message":    "오늘은 주말입니다. 수업이 없습니다.",
+			"date":       today.Format("2006-01-02"),
 			"student_id": studentID,
-			"classes": []interface{}{},
+			"classes":    []interface{}{},
 		})
 		return
 	}
@@ -60,21 +64,32 @@ func GetStudentTodaySchedule(c *gin.Context) {
 		ORDER BY 
 			t.start_time
 	`
-	err = database.DB.Select(&schedules, query, today.Format("2006-01-02"), studentID, dayOfWeek)
-	
+
+	err = config.PostgresDB.Select(&schedules, query, today.Format("2006-01-02"), studentID, dayOfWeek)
 	if err != nil {
 		log.Printf("시간표 조회 오류: %v", err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "시간표를 조회할 수 없습니다"})
 		return
 	}
 
+	// 시간표가 없는 경우
+	if len(schedules) == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"message":    fmt.Sprintf("오늘(%s)은 수업이 없습니다.", dayOfWeek),
+			"date":       today.Format("2006-01-02"),
+			"student_id": studentID,
+			"classes":    []interface{}{},
+		})
+		return
+	}
+
 	// 응답 구성
 	response := models.DailySchedule{
-		Date:       today,
-		StudentID:  studentID,
-		DayOfWeek:  dayOfWeek,
-		Classes:    schedules,
-		UpdatedAt:  time.Now(),
+		Date:      today,
+		StudentID: studentID,
+		DayOfWeek: dayOfWeek,
+		Classes:   schedules,
+		UpdatedAt: time.Now(),
 	}
 
 	c.JSON(http.StatusOK, response)

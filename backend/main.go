@@ -3,31 +3,34 @@ package main
 
 import (
 	"fmt"
+	"iBeaconRoll-server/config"
+	"iBeaconRoll-server/routes"
 	"log"
 
 	"github.com/gin-gonic/gin"
-	"iBeaconRoll-server/config"
-	"iBeaconRoll-server/routes"
 )
 
 func main() {
 	fmt.Println("🚀 iBeaconRoll server started!")
 
-	// 1. 설정 로드
-	cfg := config.LoadConfig()
-	
-	// 2. 데이터베이스 연결
-	config.InitDB()
-	defer config.CloseDB()
-	
-	// 3. Gin 서버 초기화
-	router := gin.Default()
+	// 1. PostgreSQL 연결
+	config.InitPostgres()
 
-	// 4. API 라우트 등록
-	routes.RegisterAttendanceRoutes(router)
-	
-	// 5. 서버 실행
-	serverAddr := ":" + cfg.Port
-	fmt.Printf("🚀 서버 실행 중: http://localhost%s\n", serverAddr)
-	log.Fatal(router.Run(serverAddr))
+	// 2. Gin 서버 초기화
+	r := gin.Default()
+
+	// 3. API 라우트 등록
+	log.Println("🛣️  라우트 등록 시작...")
+	routes.RegisterAttendanceRoutes(r)
+	routes.RegisterScheduleRoutes(r)
+	log.Println("✅ 라우트 등록 완료")
+
+	// 등록된 라우트 확인
+	for _, route := range r.Routes() {
+		log.Printf("📍 Route: %s %s", route.Method, route.Path)
+	}
+
+	// 4. 서버 실행
+	fmt.Println("🚀 서버 실행 중: http://localhost:8080")
+	r.Run(":8080")
 }
