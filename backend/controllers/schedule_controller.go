@@ -94,17 +94,17 @@ func GetStudentTodaySchedule(c *gin.Context) {
 
 	log.Printf("📆 요청 정보 - 학생ID: %d, 날짜: %s, 요일: %s", studentID, today.Format("2006-01-02"), dayOfWeek)
 
-	// 주말인 경우 처리
-	if dayOfWeek == "Sat" || dayOfWeek == "Sun" {
-		log.Printf("💤 주말 요청 - 학생ID: %d", studentID)
-		c.JSON(http.StatusOK, gin.H{
-			"message":    "오늘은 주말입니다. 수업이 없습니다.",
-			"date":       today.Format("2006-01-02"),
-			"student_id": studentID,
-			"classes":    []interface{}{},
-		})
-		return
-	}
+	// // 주말인 경우 처리
+	// if dayOfWeek == "Sat" || dayOfWeek == "Sun" {
+	// 	log.Printf("💤 주말 요청 - 학생ID: %d", studentID)
+	// 	c.JSON(http.StatusOK, gin.H{
+	// 		"message":    "오늘은 주말입니다. 수업이 없습니다.",
+	// 		"date":       today.Format("2006-01-02"),
+	// 		"student_id": studentID,
+	// 		"classes":    []interface{}{},
+	// 	})
+	// 	return
+	// }
 
 	// ## -----1. 시간표 조회----- ##
 	schedules, err := getTodaySchedule(studentID, today, dayOfWeek)

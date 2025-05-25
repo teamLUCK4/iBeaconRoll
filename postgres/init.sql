@@ -10,7 +10,7 @@ CREATE TABLE timetables (
     student_id INTEGER REFERENCES users(student_id) ON DELETE CASCADE,
     semester INTEGER NOT NULL,
     subject_name VARCHAR(50) NOT NULL,
-    day_of_week VARCHAR(10) CHECK (day_of_week IN ('Mon', 'Tue', 'Wed', 'Thu', 'Fri')),
+    day_of_week VARCHAR(10) CHECK (day_of_week IN ('Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun')),
     start_time TIME NOT NULL,
     end_time TIME NOT NULL,
     classroom VARCHAR(20) NOT NULL
@@ -46,12 +46,17 @@ INSERT INTO timetables (student_id, semester, subject_name, day_of_week, start_t
 (1, 1, 'Algorithms', 'Mon', '09:00:00', '10:30:00', 'Building 302'),   -- id = 1
 (1, 1, 'Data Structures', 'Wed', '13:00:00', '14:30:00', 'Building 304'),  -- id = 2
 (1, 1, 'OS', 'Fri', '13:00:00', '14:30:00', 'Building 302'),  -- id = 3
-(2, 1, 'Artificial Intelligence', 'Tue', '10:00:00', '11:30:00', 'Building 303');  -- id = 4
+
+-- -- 테스트용 : 일요일 시간표
+(1, 8, 'Artificial Intelligence', 'Sun', '10:00:00', '11:30:00', 'Building 301'),
+(1, 8, 'Algorithms', 'Sun', '12:30:00', '14:30:00', 'Building 302'),
+(1, 8, 'Data Structures', 'Sun', '15:00:00', '16:30:00', 'Building 303'),
+(1, 8, 'OS', 'Sun', '18:00:00', '20:30:00', 'Building 304');
 
 
 -- attendances
 -- Hailey Kim's attendance for "Algorithms" (timetable_id = 1)
 INSERT INTO attendances (student_id, timetable_id, attendance_date, attendance_time, classroom, status) VALUES
-(1, 1, '2025-05-06', '09:00:00', 'Building 302', 'Present'),
-(1, 1, '2025-05-13', '09:00:00', 'Building 302', 'Late'),
-(2, 4, '2025-05-06', '10:00:00', 'Building 303', 'Absent');
+(1, 1, '2025-05-06', '09:00:00', 'Building 302', 'Absent'),
+(1, 1, '2025-05-13', '09:00:00', 'Building 302', 'Absent'),
+(1, 4, '2025-05-06', '10:00:00', 'Building 303', 'Absent');

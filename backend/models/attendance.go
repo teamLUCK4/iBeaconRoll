@@ -1,6 +1,6 @@
 package models
 
-// FE에서 받는 데이터 형식
+// ##--- frontend에서 받는 데이터 형식 ---##
 type AttendanceUpdateRequest struct {
 	StudentID      int    `json:"student_id"`
 	Status         string `json:"status"`
