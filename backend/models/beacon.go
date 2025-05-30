@@ -1,8 +1,6 @@
 package models
 
 import (
-	"time"
-
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
@@ -11,7 +9,7 @@ type Beacon struct {
 	ID        primitive.ObjectID `bson:"_id,omitempty" json:"id"`
 	UUID      string             `bson:"uuid" json:"uuid"`
 	Classroom string             `bson:"classroom" json:"classroom"`
-	CreatedAt time.Time          `bson:"createdAt" json:"created_at"`
+	CreatedAt string             `bson:"createdAt" json:"created_at"` // ISO8601 format: "2025-05-30T07:09:12Z"
 }
 
 // TimetableWithBeacon은 시간표와 비콘 정보를 함께 포함하는 구조체입니다.

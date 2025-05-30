@@ -32,11 +32,12 @@ func getTodaySchedule(studentID int, today time.Time, dayOfWeek string) ([]model
 			t.semester, 
 			t.subject_name, 
 			t.day_of_week, 
-			t.start_time, 
-			t.end_time, 
+			to_char(t.start_time, 'HH24:MI:SS') as start_time, 
+			to_char(t.end_time, 'HH24:MI:SS') as end_time, 
 			t.classroom,
 			a.status,
-			a.attendance_time
+			to_char(a.attendance_time, 'HH24:MI:SS') as attendance_time,
+			COALESCE(a.status, 'waiting') as attendance_status
 		FROM 
 			timetables t
 		LEFT JOIN 
@@ -66,11 +67,11 @@ func getBeaconInfo(classroom string) (*models.Beacon, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
-	beaconCollection := config.MongoDB.Collection("users")
+	beaconCollection := config.MongoDB.Collection("uuid")
 	err := beaconCollection.FindOne(ctx, bson.M{"classroom": classroom}).Decode(&beaconInfo)
 	if err != nil {
-		log.Printf("❌ 비콘 정보 조회 실패 - 교실: %s, 에러: %v", classroom, err)
-		return nil, err
+		log.Printf("📝 비콘 정보 없음 - 교실: %s", classroom)
+		return nil, nil // 비콘 정보가 없는 경우 nil 반환
 	}
 
 	beaconJSON, _ := json.MarshalIndent(beaconInfo, "", "  ")
@@ -143,17 +144,17 @@ func GetStudentTodaySchedule(c *gin.Context) {
 
 	// 응답 구성
 	response := struct {
-		Date      time.Time                    `json:"date"`
+		Date      string                       `json:"date"`
 		StudentID int                          `json:"student_id"`
 		DayOfWeek string                       `json:"day_of_week"`
 		Classes   []models.TimetableWithBeacon `json:"classes"`
-		UpdatedAt time.Time                    `json:"updated_at"`
+		UpdatedAt string                       `json:"updated_at"`
 	}{
-		Date:      today,
+		Date:      today.Format("2006-01-02T15:04:05.000Z"),
 		StudentID: studentID,
 		DayOfWeek: dayOfWeek,
 		Classes:   schedulesWithBeacon,
-		UpdatedAt: time.Now(),
+		UpdatedAt: time.Now().Format("2006-01-02T15:04:05.000Z"),
 	}
 
 	responseJSON, _ := json.MarshalIndent(response, "", "  ")
