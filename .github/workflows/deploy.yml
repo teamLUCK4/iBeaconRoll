@@ -37,3 +37,7 @@ jobs:
             --network backend \
             -p 8080:8080 \
             ${{ secrets.DOCKER_USERNAME }}/ibeaconroll-backend:latest
+    - name: Test SSH connection with curl
+      run: |
+        echo "Trying to reach port 22 on your server..."
+        curl -v telnet://203.153.155.11:22 --connect-timeout 5 || echo "Connection failed (timeout or refused)"
