@@ -1,7 +1,6 @@
 FROM golang:1.21
 
-# 👇 모듈 이름에 맞춰 경로 설정
-WORKDIR /go/src/iBeaconRoll-server
+WORKDIR /app
 
 COPY go.mod .
 COPY go.sum .
@@ -13,4 +12,4 @@ COPY . .
 RUN echo "📦 빌드 중..." && go build -o server . && echo "✅ build ok" && ls -l && ls -l server
 
 # ✅ CMD가 정확한 위치에서 ./server 실행되게 보장
-CMD ["/go/src/iBeaconRoll-server/server"]
+CMD ["/app/server"]
