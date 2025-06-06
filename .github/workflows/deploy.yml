@@ -1,43 +1,27 @@
-name: CI/CD Pipeline
+   name: Deploy to ECR
 
-on:
-  push:
-    branches:
-      - main
+   on:
+     push:
+       branches:
+         - main
 
-jobs:
-  deploy:
-    runs-on: ubuntu-latest
+   jobs:
+     build:
+       runs-on: ubuntu-latest
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
+       steps:
+         - name: Checkout code
+           uses: actions/checkout@v2
 
-    - name: Log in to DockerHub
-      run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+         - name: Log in to Amazon ECR
+           id: login-ecr
+           uses: aws-actions/amazon-ecr-login@v1
 
-    - name: Build Docker image
-      run: docker build -t ${{ secrets.DOCKER_USERNAME }}/ibeaconroll-backend:latest ./backend
-
-    - name: Push Docker image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/ibeaconroll-backend:latest
-
-    - name: SSH and deploy on server
-      uses: appleboy/ssh-action@v1.0.0
-      with:
-        host: ${{ secrets.SSH_HOST }}
-        username: ${{ secrets.SSH_USER }}
-        key: ${{ secrets.SSH_PRIVATE_KEY }}
-        script: |
-          docker pull ${{ secrets.DOCKER_USERNAME }}/ibeaconroll-backend:latest
-          docker stop backend || true
-          docker rm backend || true
-          docker run -d --name backend \
-            --env-file /home/hailey/ibeaconroll-server/.env \
-            --network backend \
-            -p 8080:8080 \
-            ${{ secrets.DOCKER_USERNAME }}/ibeaconroll-backend:latest
-    - name: Test SSH connection with curl
-      run: |
-        echo "Trying to reach port 22 on your server..."
-        curl -v telnet://203.153.155.11:22 --connect-timeout 5 || echo "Connection failed (timeout or refused)"
+         - name: Build, tag, and push image to ECR
+           env:
+             ECR_REGISTRY: ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
+             ECR_REPOSITORY: your-ecr-repo-name
+             IMAGE_TAG: ${{ github.sha }}
+           run: |
+             docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG ./backend
+             docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
