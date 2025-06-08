@@ -3,7 +3,6 @@ package main
 
 import (
 	"fmt"
-	"os"
 	"iBeaconRoll-server/config"
 	"iBeaconRoll-server/routes"
 	"log"
