@@ -26,13 +26,45 @@ func UpdateAttendance(c *gin.Context) {
 
 	db := config.PostgresDB
 
-	query := `
-		UPDATE attendances 
-		SET status = $1 
-		WHERE student_id = $2 AND classroom = $3 AND attendance_date = $4
+	// 먼저 해당 레코드가 있는지 확인
+	var exists bool
+	checkQuery := `
+		SELECT EXISTS (
+			SELECT 1 FROM attendances 
+			WHERE student_id = $1 AND timetable_id = $2 AND attendance_date = $3
+		)
 	`
+	err = db.Get(&exists, checkQuery, req.StudentID, req.TimetableID, req.AttendanceDate)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to check attendance record"})
+		return
+	}
 
-	result, err := db.Exec(query, req.Status, req.StudentID, req.Classroom, req.AttendanceDate)
+	if !exists {
+		// 레코드가 없으면 INSERT
+		insertQuery := `
+			INSERT INTO attendances (student_id, timetable_id, classroom, attendance_date, status, attendance_time)
+			VALUES ($1, $2, $3, $4, $5, CURRENT_TIME)
+		`
+		_, err = db.Exec(insertQuery, req.StudentID, req.TimetableID, req.Classroom, req.AttendanceDate, req.Status)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to insert attendance"})
+			return
+		}
+		c.JSON(http.StatusOK, gin.H{
+			"message": "Attendance inserted",
+			"action":  "insert",
+		})
+		return
+	}
+
+	// 레코드가 있으면 UPDATE
+	updateQuery := `
+		UPDATE attendances 
+		SET status = $1, attendance_time = CURRENT_TIME
+		WHERE student_id = $2 AND timetable_id = $3 AND attendance_date = $4
+	`
+	result, err := db.Exec(updateQuery, req.Status, req.StudentID, req.TimetableID, req.AttendanceDate)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to update attendance"})
 		return
@@ -41,6 +73,7 @@ func UpdateAttendance(c *gin.Context) {
 	rows, _ := result.RowsAffected()
 	c.JSON(http.StatusOK, gin.H{
 		"message":       "Attendance updated",
+		"action":        "update",
 		"rows_affected": rows,
 	})
 }

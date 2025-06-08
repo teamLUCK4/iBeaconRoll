@@ -26,7 +26,7 @@ CREATE TABLE attendances (
     attendance_date DATE NOT NULL,
     attendance_time TIME NOT NULL,
     classroom VARCHAR(20),
-    status VARCHAR(10) CHECK (status IN ('Waiting', 'Ongoing', 'Completed', 'Absent')) NOT NULL
+    status VARCHAR(10) CHECK (status IN ('waiting', 'ongoing', 'completed', 'absent')) NOT NULL
 );
 
 
@@ -57,12 +57,12 @@ INSERT INTO timetables (student_id, semester, subject_name, day_of_week, start_t
 (1, 8, 'Artificial Intelligence', 'Sun', '10:00:00', '11:30:00', 'Building 301'),
 (1, 8, 'Algorithms', 'Sun', '12:30:00', '14:30:00', 'Building 302'),
 (1, 8, 'Data Structures', 'Sun', '15:00:00', '16:30:00', 'Building 303'),
-(1, 8, 'OS', 'Sun', '18:00:00', '20:30:00', 'Building 304');
+(1, 8, 'OS', 'Sun', '17:00:00', '20:30:00', 'Building 304');
 
 
 -- attendances
 -- Hailey Kim's attendance for "Algorithms" (timetable_id = 1)
 INSERT INTO attendances (student_id, timetable_id, attendance_date, attendance_time, classroom, status) VALUES
-(1, 1, '2025-05-06', '09:00:00', 'Building 302', 'Waiting'),
-(1, 1, '2025-05-13', '09:00:00', 'Building 302', 'Waiting'),
-(1, 4, '2025-05-06', '10:00:00', 'Building 303', 'Waiting');
+(1, 1, '2025-05-06', '09:00:00', 'Building 302', 'waiting'),
+(1, 1, '2025-05-13', '09:00:00', 'Building 302', 'waiting'),
+(1, 4, '2025-05-06', '10:00:00', 'Building 303', 'waiting');
