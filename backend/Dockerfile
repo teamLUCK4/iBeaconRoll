@@ -8,6 +8,8 @@ RUN go mod download
 
 COPY . .
 
+COPY .env .env
+
 # 🔥 빌드 + 실행 파일 존재 확인
 RUN echo "📦 빌드 중..." && go build -o server . && echo "✅ build ok" && ls -l && ls -l server
 
