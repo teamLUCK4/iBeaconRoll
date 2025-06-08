@@ -33,6 +33,13 @@ func main() {
 		log.Printf("📍 Route: %s %s", route.Method, route.Path)
 	}
 
+	// 간단한 "Hello, World!" 엔드포인트 추가
+	r.GET("/hello", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "Hello, Luck4!",
+		})
+	})
+
 	// 4. 서버 실행
 	fmt.Println("🚀 서버 실행 중: http://localhost:8080")
 	r.Run(":8080")
