@@ -3,10 +3,11 @@ package main
 
 import (
 	"fmt"
+	"os"
 	"iBeaconRoll-server/config"
 	"iBeaconRoll-server/routes"
 	"log"
-
+	"github.com/joho/godotenv"
 	"github.com/gin-gonic/gin"
 )
 
