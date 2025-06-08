@@ -11,6 +11,14 @@ import (
 )
 
 func main() {
+
+	// ✅ .env 파일 불러오기
+	if err := godotenv.Load(); err != nil {
+		log.Println("⚠️ .env 파일을 불러올 수 없습니다. 시스템 환경변수를 사용합니다.")
+	} else {
+		log.Println("✅ .env 파일을 성공적으로 로드했습니다.")
+	}
+	
 	fmt.Println("🚀 iBeaconRoll server started!")
 
 	// 1. PostgreSQL 연결
