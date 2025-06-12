@@ -48,6 +48,17 @@ INSERT INTO timetables (student_id, semester, subject_name, day_of_week, start_t
 (1, 1, 'Algorithms', 'Mon', '09:00:00', '10:30:00', 'Building 302'),   -- id = 1
 (1, 1, 'Data Structures', 'Wed', '13:00:00', '14:30:00', 'Building 304'),  -- id = 2
 
+-- -- 테스트용 : 화요일 시간표
+(1, 8, 'Artificial Intelligence', 'Tue', '10:00:00', '11:30:00', 'Building 301'),
+(1, 8, 'Algorithms', 'Tue', '12:30:00', '14:30:00', 'Building 302'),
+(1, 8, 'Data Structures', 'Tue', '15:00:00', '16:30:00', 'Building 303'),
+(1, 8, 'OS', 'Tue', '01:00:00', '3:30:00', 'Building 304'),
+
+(1, 8, 'Artificial Intelligence', 'Sun', '10:00:00', '11:30:00', 'Building 301'),
+(1, 8, 'Algorithms', 'Sun', '12:30:00', '14:30:00', 'Building 302'),
+(1, 8, 'Data Structures', 'Sun', '15:00:00', '16:30:00', 'Building 303'),
+(1, 8, 'OS', 'Sun', '17:00:00', '20:30:00', 'Building 304');
+
 -- -- 테스트용 : 금요일 시간표
 (1, 8, 'Artificial Intelligence', 'Fri', '10:00:00', '11:30:00', 'Building 301'),
 (1, 8, 'Algorithms', 'Fri', '12:30:00', '14:30:00', 'Building 302'),

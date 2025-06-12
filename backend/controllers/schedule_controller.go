@@ -90,7 +90,8 @@ func GetStudentTodaySchedule(c *gin.Context) {
 	}
 
 	// 오늘 요일 가져오기 (Mon, Tue, Wed, Thu, Fri 형식으로 변환)
-	today := time.Now()
+	loc, _ := time.LoadLocation("Asia/Seoul")
+	today := time.Now().In(loc)
 	dayOfWeek := today.Weekday().String()[:3]
 
 	log.Printf("📆 요청 정보 - 학생ID: %d, 날짜: %s, 요일: %s", studentID, today.Format("2006-01-02"), dayOfWeek)
