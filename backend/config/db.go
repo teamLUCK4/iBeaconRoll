@@ -46,11 +46,9 @@ func InitMongoDB() {
 	defer cancel()
 
 	// MongoDB 연결 설정
-	mongoURI := fmt.Sprintf("mongodb://%s:%s@%s:%s",
-		os.Getenv("MONGO_USER"),
-		os.Getenv("MONGO_PASSWORD"),
-		os.Getenv("MONGO_HOST"),
-		os.Getenv("MONGO_PORT"),
+	mongoURI := fmt.Sprintf("mongodb://%s:%s",
+	    os.Getenv("MONGO_HOST"),
+	    os.Getenv("MONGO_PORT"),
 	)
 
 	clientOptions := options.Client().ApplyURI(mongoURI)
